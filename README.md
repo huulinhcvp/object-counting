@@ -62,5 +62,19 @@ Lưu ý: Có thể sử dụng các kỹ thuật blur khác như GaussianBlur, G
 
 # Đếm các vật thể thực trong một nền đồng nhất
 
+## Nhận xét:
+
+Việc xử lý 4 hình ảnh đã cho cũng tương tự như việc xử lý với ảnh hạt gạo, khác biệt sẽ ở bước tiền xử lý để phân đoạn hình ảnh thành ảnh nhị phân, việc đếm các thành phần liên thông hoặc đếm contours có thể tái sử dụng ở bài toán đếm số hạt gạo trong ảnh.
+
+## Các bước xử lý ảnh
+
+1. Để ý thấy có sự pha trộn giữa màu của vật thể và màu của nền --> Tăng độ tương phản của grayscale image bằng cách xử dụng gamma correction
+
+2. Áp dụng adaptive thresholding để convert ảnh về ảnh nhị phân. Lúc này xuất hiện nhiều nhiễu trong foregrounds của vật thể --> áp dụng kỹ thuật "dãn nở" hình ảnh để loại bỏ nhiễu này.
+
+3. Áp dụng kỹ thuật "xói mòn" để làm sạch boundary giữa foregrounds và background
+
+4. Áp dụng medianBlur để tăng độ smoothing cho ảnh --> việc đếm các thành phần liên thông và đếm contours chính xác hơn
+
 
 
