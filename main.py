@@ -7,11 +7,12 @@ import cv2 as cv
 import numpy as np
 from counter import CounterGrainsOfRice
 from processing import ImageProcessing
+from PIL import Image
 
-path = 'inputs/objets4.jpg'
-
+path = 'inputs/periodic_noise.png'
 
 src_img = cv.imread(path, cv.IMREAD_GRAYSCALE) # load input images
+cv.imshow("grayscale image", src_img)
 kernel = np.ones((5,5),np.uint8) # kernel for morphological operators
 
 # image processing
@@ -20,8 +21,10 @@ process = ImageProcessing(kernel, src_img)
 ## get result - depend on input image
 # src_img, out_img = process.normal_denoise()
 # src_img, out_img = process.black_white_process()
-# src_img, out_img = process.periodic_denoise()
-src_img, out_img = process.real_world_object_counting()
+src_img, out_img = process.periodic_denoise()
+# src_img, out_img = process.real_world_object_counting()
+
+# cv.imshow("threshold image", out_img)
 
 # counter program
 counter = CounterGrainsOfRice(out_img)
