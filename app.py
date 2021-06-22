@@ -59,7 +59,7 @@ class ObjectCounting(tk.Tk):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
-        # variables for tracking state of pomodoro timer
+        # variables for tracking image label
         self.src_img = Image.open('inputs/objets3.jpg')
 
         container = ttk.Frame(self)
@@ -100,6 +100,9 @@ class ObjectCounting(tk.Tk):
         filename = filedialog.askopenfilename(filetypes=[("Image File",'.jpg .png')])
         self.src_img = Image.open(filename)
         return self.src_img
+    
+    def reset_img(self):
+        self.src_img = Image.open('inputs/objets3.jpg')
 
 
 app = ObjectCounting()

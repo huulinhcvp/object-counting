@@ -60,9 +60,18 @@ class Settings(ttk.Frame):
         )
         
         submit_btn.grid(column=0, row=1, sticky="W")
-
+        
+        self.res_str = tk.StringVar(value="")
+        
         for child in self.settings_container.winfo_children():
             child.grid_configure(padx=10, pady=10)
+            
+        self.res_label = ttk.Label(
+            self.settings_container,
+            textvariable=self.res_str,
+            style="LightText.TLabel",
+            font=("Helvetica",12)
+        )
         
         button_container = ttk.Frame(self, style="Background.TFrame")
         button_container.grid(sticky="EW", padx=10)
@@ -106,19 +115,10 @@ class Settings(ttk.Frame):
         
         cv.imwrite("outputs/out.jpg", out2_img)
         
-        res_str = 'Result:  ' + str(num_of_contours)
+        self.res_str.set(f'Result:  {num_of_contours}')
         
-        
-        res_label = ttk.Label(
-            self.settings_container,
-            text=res_str,
-            style="LightText.TLabel",
-            font=("Helvetica",12)
-        )
-        
-        res_label.grid(column=0, row=2, sticky="W")
-        
-        res_label.grid_configure(padx=10, pady=10)
+        self.res_label.grid(column=0, row=2, sticky="W")
+        self.res_label.grid_configure(padx=10, pady=10)
         
         self.controller.src_img = Image.open('outputs/out.jpg')
         

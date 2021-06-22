@@ -43,7 +43,6 @@ class Window(ttk.Frame):
         self.panel_img.image = src_img
         self.panel_img.pack(fill = "both", expand = "yes")
         
-        
     def open_img(self):
         src_img = self.controller.open_img()
         
@@ -57,4 +56,5 @@ class Window(ttk.Frame):
         src_img = ImageTk.PhotoImage(src_img)
         self.panel_img.configure(image=src_img)
         self.panel_img.image = src_img
+        self.controller.reset_img()
         
