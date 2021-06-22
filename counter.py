@@ -34,7 +34,7 @@ class CounterGrainsOfRice:
         return new_img, label_count
     
 
-    def numOfContours(self, src_img):
+    def numOfContours(self, original_img):
 
         """
             Computes polygonal contour boundary of foreground objects
@@ -42,9 +42,7 @@ class CounterGrainsOfRice:
 
         contours, _ = cv.findContours(self.binary_img, cv.RETR_EXTERNAL,  cv.CHAIN_APPROX_SIMPLE)
 
-        output_img = cv.cvtColor(src_img, cv.COLOR_GRAY2BGR)
+        cv.drawContours(original_img, contours, -1, (0, 0, 255), 2)
 
-        cv.drawContours(output_img, contours, -1, (0, 0, 255), 2)
-
-        return output_img, len(contours)
+        return original_img, len(contours)
 

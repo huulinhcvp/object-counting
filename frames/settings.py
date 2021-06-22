@@ -102,7 +102,6 @@ class Settings(ttk.Frame):
         
         # convert image from BGR to GRAYSCALE image
         np_img = cv.cvtColor(np_img, cv.COLOR_RGB2BGR)
-        np_img = cv.cvtColor(np_img, cv.COLOR_BGR2GRAY)
         
         # image processing
         process = ImageProcessing(kernel, np_img)

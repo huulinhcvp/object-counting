@@ -7,11 +7,10 @@ class ImageProcessing:
 
     def __init__(self, kernel, src_img):
         self.kernel = kernel
-        self.src_img = src_img
+        self.original_img = src_img
+        self.src_img = cv.cvtColor(src_img, cv.COLOR_BGR2GRAY)
 
     def periodic_denoise(self):
-        
-        show_img = self.src_img.copy()
         
         self.src_img = cv.morphologyEx(self.src_img, cv.MORPH_OPEN, self.kernel)
 
@@ -60,7 +59,7 @@ class ImageProcessing:
         # threshold_img = cv.adaptiveThreshold (self.src_img, 255.0, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 51, -22)
 
 
-        return show_img, threshold_img
+        return self.original_img, threshold_img
 
 
     def normal_denoise(self):
@@ -74,7 +73,7 @@ class ImageProcessing:
         # erode image - denoise forgegrounds in binary img
         erode_img = cv.erode(threshold_img, self.kernel, iterations=1)
 
-        return self.src_img, erode_img
+        return self.original_img, erode_img
 
 
     def black_white_process(self):
@@ -83,7 +82,7 @@ class ImageProcessing:
         # applied for black-white image
         _, threshold_img = cv.threshold(self.src_img, 0.1, 255, cv.THRESH_BINARY)
 
-        return self.src_img, threshold_img
+        return self.original_img, threshold_img
 
 
     def real_world_object_counting(self):
@@ -102,7 +101,7 @@ class ImageProcessing:
 
         img_erode = cv.medianBlur(img_erode, 7)
 
-        return self.src_img, img_erode
+        return self.original_img, img_erode
     
     @staticmethod
     def real_world(img, n, r, h, cof):
