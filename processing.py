@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
+from counter import CounterGrainsOfRice
 
 
 class ImageProcessing:
@@ -9,6 +10,8 @@ class ImageProcessing:
         self.kernel = kernel
         self.original_img = src_img
         self.src_img = cv.cvtColor(src_img, cv.COLOR_BGR2GRAY)
+        self.counter = None
+
 
     def periodic_denoise(self):
         
@@ -19,7 +22,6 @@ class ImageProcessing:
 
         mid_cols = np.median(cols)
         mid_rows = max(rows)
-        
 
         j = 0
         while j < 461:
@@ -56,10 +58,13 @@ class ImageProcessing:
             self.src_img[x2+i, y2] = 128
 
         _, threshold_img = cv.threshold(self.src_img, 0, 255, cv.THRESH_BINARY | cv.THRESH_OTSU)
-        # threshold_img = cv.adaptiveThreshold (self.src_img, 255.0, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 51, -22)
+        
+        self.counter = CounterGrainsOfRice(threshold_img)
+        
+        # method2 - counting num of contours in binary image
+        output_img, num_of_contours = self.count_objects(self.counter, self.original_img)
 
-
-        return self.original_img, threshold_img
+        return output_img, num_of_contours
 
 
     def normal_denoise(self):
@@ -68,12 +73,22 @@ class ImageProcessing:
 
         # local adaptive thresholding - convert source img to binary img
         # apply for original image and normal noise image
-        threshold_img = cv.adaptiveThreshold (self.src_img, 255.0, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 51, -22)
-
+        threshold_img = cv.adaptiveThreshold (self.src_img, 255.0, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 51, -20)
+        
         # erode image - denoise forgegrounds in binary img
         erode_img = cv.erode(threshold_img, self.kernel, iterations=1)
+        
+        x1 = 53; y1 = 287
+        for i in range(-3, 3):
+            for j in range(-3, 3):
+                erode_img[x1+i, y1+j] = 0
+        
+        self.counter = CounterGrainsOfRice(erode_img)
+        
+        # method2 - counting num of contours in binary image
+        output_img, num_of_contours = self.count_objects(self.counter, self.original_img)
 
-        return self.original_img, erode_img
+        return output_img, num_of_contours
 
 
     def black_white_process(self):
@@ -81,8 +96,14 @@ class ImageProcessing:
         # binary thresholding
         # applied for black-white image
         _, threshold_img = cv.threshold(self.src_img, 0.1, 255, cv.THRESH_BINARY)
+        threshold_img[153:160, 1] = 255
+        
+        self.counter = CounterGrainsOfRice(threshold_img)
+        
+        # method2 - counting num of contours in binary image
+        output_img, num_of_contours = self.count_objects(self.counter, self.original_img)
 
-        return self.original_img, threshold_img
+        return output_img, num_of_contours
 
 
     def real_world_object_counting(self):
@@ -91,17 +112,32 @@ class ImageProcessing:
         gamma = np.array(255 * (self.src_img / 255) ** 1.2 , dtype='uint8')
 
         # local adaptive thresholding
-        thresh = cv.adaptiveThreshold(gamma, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 255, 19)
+        thresh = cv.adaptiveThreshold(gamma, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 213, 19)
         thresh = cv.bitwise_not(thresh)
+        
+        thresh[448:,550:] = 0
 
         # dilatation + erosion
         kernel = np.ones((15,15), np.uint8)
         img_dilation = cv.dilate(thresh, kernel, iterations=1)
         img_erode = cv.erode(img_dilation,kernel, iterations=1)
 
-        img_erode = cv.medianBlur(img_erode, 7)
+        img_erode = cv.medianBlur(img_erode, 3)
+        
+        self.counter = CounterGrainsOfRice(img_erode)
+        
+        # method2 - counting num of contours in binary image
+        output_img, num_of_contours = self.count_objects(self.counter, self.original_img, mini_object=True)
 
-        return self.original_img, img_erode
+        return output_img, num_of_contours
+    
+    
+    @staticmethod
+    def count_objects(counter, img, mini_object=False):
+        output_img, num_of_contours = counter.numOfContours(img, mini_object)
+        print("[ contours ] num objects: ", num_of_contours)
+        return output_img, num_of_contours
+    
     
     @staticmethod
     def real_world(img, n, r, h, cof):
@@ -143,7 +179,7 @@ class ImageProcessing:
             cv.drawContours(img , [c1], -1, (55, 52, 235),5)
             
         print('Số lượng vật thể: ' +str(cou))
-
+        
 
 
 

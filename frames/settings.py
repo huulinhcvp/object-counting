@@ -107,25 +107,18 @@ class Settings(ttk.Frame):
         process = ImageProcessing(kernel, np_img)
         
         if (self.image_processing_method_name.get() == 'real_world_object_counting'):
-            src_img, out_img = process.real_world_object_counting()
+            output_img, num_of_objects = process.real_world_object_counting()
         elif (self.image_processing_method_name.get() == 'periodic_denoise'):
-            src_img, out_img = process.periodic_denoise()
+            output_img, num_of_objects = process.periodic_denoise()
         elif (self.image_processing_method_name.get() == 'normal_denoise'):
-            src_img, out_img = process.normal_denoise()
+            output_img, num_of_objects = process.normal_denoise()
         else:
-            src_img, out_img = process.black_white_process()
+            output_img, num_of_objects = process.black_white_process()
         
-        # counter program
-        counter = CounterGrainsOfRice(out_img)
-        
-        # method2 - counting num of contours in binary image
-        out2_img, num_of_contours = counter.numOfContours(src_img)
-        print("[ contours ] num objects: ", num_of_contours)
-        
-        cv.imwrite(OUTPUT_PATH, out2_img)
+        cv.imwrite(OUTPUT_PATH, output_img)
         
         ## show result - number of contours in image
-        self.res_str.set(f'Result:  {num_of_contours}')
+        self.res_str.set(f'Result:  {num_of_objects}')
         
         self.res_label.grid(column=0, row=2, sticky="W")
         self.res_label.grid_configure(padx=10, pady=10)
