@@ -4,6 +4,7 @@ from collections import deque
 from frames import Window, Settings
 from tkinter import filedialog
 from PIL import ImageTk, Image
+import numpy as np
 
 # all constants in object counting app
 COLOUR_PRIMARY = "#2e3f4f"
@@ -12,8 +13,11 @@ COLOUR_LIGHT_BACKGROUND = "#fff"
 COLOUR_LIGHT_TEXT = "#eee"
 COLOUR_DARK_TEXT = "#8095a8"
 
+DEFAULT_PATH = 'inputs/objets3.jpg'
+
 
 class ObjectCounting(tk.Tk):
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -59,8 +63,8 @@ class ObjectCounting(tk.Tk):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
-        # variables for tracking image label
-        self.src_img = Image.open('inputs/objets3.jpg')
+        self.src_img = Image.open(DEFAULT_PATH) # variables for tracking image label
+        self.kernel = np.ones((5,5),np.uint8) # kernel for morphological operators
 
         container = ttk.Frame(self)
         container.grid()
@@ -91,18 +95,31 @@ class ObjectCounting(tk.Tk):
 
         self.stop_button.grid(row=0, column=0, sticky="EW", padx=5)
 
+
     def show_frame(self, container):
+        """
+            show image frame || settings frame,
+            update image frame after processing
+        """
         frame = self.frames[container]
         frame.update()
         frame.tkraise()
         
+
     def open_img(self):
+        """
+            open image file from file system
+        """
         filename = filedialog.askopenfilename(filetypes=[("Image File",'.jpg .png')])
         self.src_img = Image.open(filename)
         return self.src_img
+
     
     def reset_img(self):
-        self.src_img = Image.open('inputs/objets3.jpg')
+        """
+            default image
+        """
+        self.src_img = Image.open(DEFAULT_PATH)
 
 
 app = ObjectCounting()

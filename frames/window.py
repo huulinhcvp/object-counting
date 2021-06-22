@@ -6,6 +6,7 @@ from collections import deque
 
 
 class Window(ttk.Frame):
+    
     def __init__(self, parent, controller, show_settings):
         super().__init__(parent)
 
@@ -42,19 +43,25 @@ class Window(ttk.Frame):
         )
         self.panel_img.image = src_img
         self.panel_img.pack(fill = "both", expand = "yes")
+
         
     def open_img(self):
-        src_img = self.controller.open_img()
         
-        # PhotoImage class is used to add image to widgets, icons etc
-        src_img = ImageTk.PhotoImage(src_img)
-        self.panel_img.configure(image=src_img)
-        self.panel_img.image = src_img
+        src_img = self.controller.open_img()
+        self.config_image(src_img)
+
         
     def update(self):
         src_img = self.controller.src_img
+        self.config_image(src_img)
+        self.controller.reset_img()
+        
+        
+    def config_image(self, src_img):
+        
+        # PhotoImage class is used to add image to widgets, icons etc
         src_img = ImageTk.PhotoImage(src_img)
+        
         self.panel_img.configure(image=src_img)
         self.panel_img.image = src_img
-        self.controller.reset_img()
         

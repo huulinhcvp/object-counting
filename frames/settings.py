@@ -6,8 +6,11 @@ from processing import ImageProcessing
 import cv2 as cv
 import numpy as np
 
+OUTPUT_PATH = "outputs/out.jpg"
+
 
 class Settings(ttk.Frame):
+    
     def __init__(self, parent, controller, show_timer):
         super().__init__(parent)
 
@@ -86,11 +89,18 @@ class Settings(ttk.Frame):
         )
 
         timer_button.grid(column=0, row=0, sticky="EW", padx=2)
+
     
     def handler_submit(self):
         
-        kernel = np.ones((5,5),np.uint8) # kernel for morphological operators
+        """
+            IMAGE PROCESSING
+        """
+        
+        kernel = self.controller.kernel
         np_img = np.array(self.controller.src_img) # load input images
+        
+        # convert image from BGR to GRAYSCALE image
         np_img = cv.cvtColor(np_img, cv.COLOR_RGB2BGR)
         np_img = cv.cvtColor(np_img, cv.COLOR_BGR2GRAY)
         
@@ -113,14 +123,16 @@ class Settings(ttk.Frame):
         out2_img, num_of_contours = counter.numOfContours(src_img)
         print("[ contours ] num objects: ", num_of_contours)
         
-        cv.imwrite("outputs/out.jpg", out2_img)
+        cv.imwrite(OUTPUT_PATH, out2_img)
         
+        ## show result - number of contours in image
         self.res_str.set(f'Result:  {num_of_contours}')
         
         self.res_label.grid(column=0, row=2, sticky="W")
         self.res_label.grid_configure(padx=10, pady=10)
         
-        self.controller.src_img = Image.open('outputs/out.jpg')
+        self.controller.src_img = Image.open(OUTPUT_PATH)
+
         
     def update(self):
-        pass
+        print('This is a placeholder!!!')
