@@ -8,6 +8,7 @@ from collections import deque
 class Window(ttk.Frame):
     
     def __init__(self, parent, controller, show_settings):
+        
         super().__init__(parent)
 
         self["style"] = "Background.TFrame"

@@ -9,7 +9,7 @@ import numpy as np
 from processing import ImageProcessing
 from PIL import Image
 
-path = 'inputs/black_white.png'
+path = '../inputs/black_white.png'
 
 src_img = cv.imread(path) # load input images
 cv.imshow("original image", src_img)

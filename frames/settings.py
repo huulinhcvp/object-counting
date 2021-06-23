@@ -6,7 +6,7 @@ from processing import ImageProcessing
 import cv2 as cv
 import numpy as np
 
-OUTPUT_PATH = "outputs/out.jpg"
+OUTPUT_PATH = "resources/out.jpg"
 
 
 class Settings(ttk.Frame):
@@ -106,14 +106,18 @@ class Settings(ttk.Frame):
         # image processing
         process = ImageProcessing(kernel, np_img)
         
-        if (self.image_processing_method_name.get() == 'real_world_object_counting'):
-            output_img, num_of_objects = process.real_world_object_counting()
-        elif (self.image_processing_method_name.get() == 'periodic_denoise'):
-            output_img, num_of_objects = process.periodic_denoise()
-        elif (self.image_processing_method_name.get() == 'normal_denoise'):
-            output_img, num_of_objects = process.normal_denoise()
-        else:
-            output_img, num_of_objects = process.black_white_process()
+        
+        try:
+            if (self.image_processing_method_name.get() == 'real_world_object_counting'):
+                output_img, num_of_objects = process.real_world_object_counting()
+            elif (self.image_processing_method_name.get() == 'periodic_denoise'):
+                output_img, num_of_objects = process.periodic_denoise()
+            elif (self.image_processing_method_name.get() == 'normal_denoise'):
+                output_img, num_of_objects = process.normal_denoise()
+            else:
+                output_img, num_of_objects = process.black_white_process()
+        except:
+            pass
         
         cv.imwrite(OUTPUT_PATH, output_img)
         

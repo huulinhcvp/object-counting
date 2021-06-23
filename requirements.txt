@@ -1,0 +1,15 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: linux-64
+matplotlib=3.4.2=pypi_0
+numpy=1.20.3=py38h9894fe3_1
+opencv=4.5.2=py38h578d9bd_0
+pillow=8.2.0=pypi_0
+pip=21.1.2=py38h06a4308_0
+py-opencv=4.5.2=py38hd0cf306_0
+pyparsing=2.4.7=pypi_0
+python=3.8.10=hdb3f193_7
+python-dateutil=2.8.1=pypi_0
+setuptools=52.0.0=py38h06a4308_0
+tk=8.6.10=hbc83047_0
+wheel=0.36.2=pyhd3eb1b0_0

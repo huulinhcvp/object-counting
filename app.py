@@ -1,3 +1,20 @@
+#!/usr/bin/python3
+
+# Copyright 2021 Ha Huu Linh, hahuulinh1999@gmail.com
+
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import tkinter as tk
 from tkinter import ttk
 from collections import deque
@@ -13,12 +30,13 @@ COLOUR_LIGHT_BACKGROUND = "#fff"
 COLOUR_LIGHT_TEXT = "#eee"
 COLOUR_DARK_TEXT = "#8095a8"
 
-DEFAULT_PATH = 'inputs/objets3.jpg'
+DEFAULT_PATH = 'resources/default.jpg'
 
 
 class ObjectCounting(tk.Tk):
     
     def __init__(self, *args, **kwargs):
+        
         super().__init__(*args, **kwargs)
 
         # define style for my app
@@ -110,9 +128,14 @@ class ObjectCounting(tk.Tk):
         """
             open image file from file system
         """
-        filename = filedialog.askopenfilename(filetypes=[("Image File",'.jpg .png')])
-        self.src_img = Image.open(filename)
-        return self.src_img
+        try:
+            filename = filedialog.askopenfilename(filetypes=[("Image File",'.jpg .png')])
+            self.src_img = Image.open(filename)
+            return self.src_img
+        except AttributeError:
+            print("Please choose one image for processing!!!")
+            self.reset_img()
+            return self.src_img
 
     
     def reset_img(self):
