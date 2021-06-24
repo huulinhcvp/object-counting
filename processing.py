@@ -95,7 +95,7 @@ class ImageProcessing:
 
         # binary thresholding
         # applied for black-white image
-        _, threshold_img = cv.threshold(self.src_img, 0.1, 255, cv.THRESH_BINARY)
+        _, threshold_img = cv.threshold(self.src_img, 0, 255, cv.THRESH_BINARY)
         threshold_img[153:160, 1] = 255
         
         self.counter = CounterGrainsOfRice(threshold_img)

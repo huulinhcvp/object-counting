@@ -9,7 +9,7 @@ import numpy as np
 from processing import ImageProcessing
 from PIL import Image
 
-path = '../inputs/black_white.png'
+path = '../inputs/objets1.jpg'
 
 src_img = cv.imread(path) # load input images
 cv.imshow("original image", src_img)
@@ -20,9 +20,9 @@ process = ImageProcessing(kernel, src_img)
 
 ## get result - depend on input image
 # output_img, num_of_objects = process.normal_denoise()
-output_img, num_of_objects = process.black_white_process()
+# output_img, num_of_objects = process.black_white_process()
 # output_img, num_of_objects = process.periodic_denoise()
-# output_img, num_of_objects = process.real_world_object_counting()
+output_img, num_of_objects = process.real_world_object_counting()
 
 cv.imshow("output", output_img)
 
